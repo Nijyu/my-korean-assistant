@@ -23,7 +23,7 @@ const Chat = () => {
       },
       {
         headers: {
-          Authorization: `Bearer YOUR_API_KEY`,
+          Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
           'Content-Type': 'application/json'
         }
       }
