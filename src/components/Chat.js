@@ -10,8 +10,13 @@ const Chat = () => {
     setMessages([...messages, newMessage]);
     setInput('');
 
-    const aiResponse = await fetchAIResponse(input);
-    setMessages([...messages, newMessage, { sender: 'ai', text: aiResponse }]);
+    try {
+      const aiResponse = await fetchAIResponse(input);
+      setMessages((prevMessages) => [...prevMessages, newMessage, { sender: 'ai', text: aiResponse }]);
+    } catch (error) {
+      console.error('Error fetching AI response:', error);
+      setMessages((prevMessages) => [...prevMessages, { sender: 'ai', text: 'Sorry, something went wrong.' }]);
+    }
   };
 
   const fetchAIResponse = async (userInput) => {
@@ -36,15 +41,16 @@ const Chat = () => {
       throw error;
     }
   };
-  
 
   return (
     <div style={{ padding: '20px' }}>
       <h2>Chat with Jae-Min</h2>
       <div style={{ border: '1px solid #ccc', padding: '10px', height: '400px', overflowY: 'scroll' }}>
         {messages.map((msg, index) => (
-          <div key={index} style={{ textAlign: msg.sender === 'user' ? 'right' : 'left' }}>
-            <p>{msg.text}</p>
+          <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start' }}>
+            {msg.sender === 'ai' && <img src="/jae-min.png" alt="Jae-Min" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />}
+            <p style={{ background: msg.sender === 'user' ? '#cce5ff' : '#f1f1f1', padding: '10px', borderRadius: '10px', maxWidth: '70%', margin: '5px 0' }}>{msg.text}</p>
+            {msg.sender === 'user' && <img src="path/to/your-avatar.png" alt="User" style={{ width: '40px', height: '40px', borderRadius: '50%', marginLeft: '10px' }} />}
           </div>
         ))}
       </div>
