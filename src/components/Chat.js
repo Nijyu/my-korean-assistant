@@ -15,21 +15,28 @@ const Chat = () => {
   };
 
   const fetchAIResponse = async (userInput) => {
-    const response = await axios.post(
-      'https://api.openai.com/v1/engines/davinci-codex/completions',
-      {
-        prompt: `User: ${userInput}\nJae-Min:`,
-        max_tokens: 100
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
-          'Content-Type': 'application/json'
+    try {
+      const response = await axios.post(
+        'https://api.openai.com/v1/engines/davinci-codex/completions',
+        {
+          prompt: `User: ${userInput}\nJae-Min:`,
+          max_tokens: 100
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
+            'Content-Type': 'application/json'
+          }
         }
-      }
-    );
-    return response.data.choices[0].text.trim();
+      );
+      console.log('AI Response:', response.data);
+      return response.data.choices[0].text.trim();
+    } catch (error) {
+      console.error('Error in fetchAIResponse:', error);
+      throw error;
+    }
   };
+  
 
   return (
     <div style={{ padding: '20px' }}>
