@@ -14,7 +14,7 @@ const Chat = () => {
       const aiResponse = await fetchAIResponse(input);
       setMessages((prevMessages) => [...prevMessages, newMessage, { sender: 'ai', text: aiResponse }]);
     } catch (error) {
-      console.error('Error fetching AI response:', error);
+      console.error('Error fetching AI response:', error.response ? error.response.data : error.message);
       setMessages((prevMessages) => [...prevMessages, { sender: 'ai', text: 'Sorry, something went wrong.' }]);
     }
   };
@@ -22,8 +22,9 @@ const Chat = () => {
   const fetchAIResponse = async (userInput) => {
     try {
       const response = await axios.post(
-        'https://api.openai.com/v1/engines/davinci-codex/completions',
+        'https://api.openai.com/v1/completions',
         {
+          model: 'text-davinci-003',  // Use the appropriate model name
           prompt: `User: ${userInput}\nJae-Min:`,
           max_tokens: 100
         },
