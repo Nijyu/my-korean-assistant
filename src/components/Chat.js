@@ -37,7 +37,7 @@ const Chat = () => {
       console.log('AI Response:', response.data);
       return response.data.choices[0].text.trim();
     } catch (error) {
-      console.error('Error in fetchAIResponse:', error);
+      console.error('Error in fetchAIResponse:', error.response ? error.response.data : error.message);
       throw error;
     }
   };
@@ -50,7 +50,6 @@ const Chat = () => {
           <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start' }}>
             {msg.sender === 'ai' && <img src="/jae-min.png" alt="Jae-Min" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }} />}
             <p style={{ background: msg.sender === 'user' ? '#cce5ff' : '#f1f1f1', padding: '10px', borderRadius: '10px', maxWidth: '70%', margin: '5px 0' }}>{msg.text}</p>
-            {msg.sender === 'user' && <img src="path/to/your-avatar.png" alt="User" style={{ width: '40px', height: '40px', borderRadius: '50%', marginLeft: '10px' }} />}
           </div>
         ))}
       </div>
